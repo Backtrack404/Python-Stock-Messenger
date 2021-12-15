@@ -28,12 +28,12 @@ name = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 
 #명령어 정의
 def help_command(update, context) :
-    bot.sendMessage(chat_id='-1001436037024', text='help msg')
-    #bot.sendMessage(chat_id='-1001436037024', text='Claculate Success! \nsend command : /xsl')
+    bot.sendMessage(chat_id=CHATID, text='help msg')
+    #bot.sendMessage(chat_id=CHATID, text='Claculate Success! \nsend command : /xsl')
      
 def make_file(update, context):
     
-    bot.sendMessage(chat_id='-1001436037024', text='now calculating... \ndo not send message')
+    bot.sendMessage(chat_id=CHATID, text='now calculating... \ndo not send message')
     global Ai_Fitting_Count, getcode, timeframe, name
     code = stock(getcode) 
     result, resDate, markPrice, hiPrice, loPrice, nowPrice, volume = Scraper(count, code, timeframe).Scraping()
@@ -45,12 +45,12 @@ def make_file(update, context):
             resDate.append(redate[i].strftime('%Y%m%d'))
             nowPrice.append(round(Predict[i]))
             XSL(resDate, markPrice, hiPrice, loPrice, nowPrice, volume, name).Xsl()
-        bot.sendDocument(chat_id='-1001436037024', document=open(f'./{name}.xlsx', 'rb'))
-        bot.sendMessage(chat_id='-1001436037024', text='Calculate Success!')
+        bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
+        bot.sendMessage(chat_id=CHATID, text='Calculate Success!')
     except:
         XSL(resDate, markPrice, hiPrice, loPrice, nowPrice, volume, name).Xsl()
-        bot.sendMessage(chat_id='-1001436037024', text='연산 완료!\n상장 2년 미만의 종목은 인공지능 서비스를 지원하지 않습니다.')   
-        bot.sendDocument(chat_id='-1001436037024', document=open(f'./{name}.xlsx', 'rb'))
+        bot.sendMessage(chat_id=CHATID, text='연산 완료!\n상장 2년 미만의 종목은 인공지능 서비스를 지원하지 않습니다.')   
+        bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
         
             
 # message reply function
@@ -81,7 +81,7 @@ def get_message(update, context) :
 
 def send_local_file(update, context):
     global name
-    bot.sendDocument(chat_id='-1001436037024', document=open(f'./{name}.xlsx', 'rb'))
+    bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
     
     
 #새 메시지 확인
