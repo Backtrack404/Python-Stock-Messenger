@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime, timedelta 
 import xlsxwriter
 
+# 엑셀로 바꾸는 코드입니다. 자동으로 엑셀로 변환해 저장합니다.
 class XSL:
     def __init__(self, resDate, markPrice, hiPrice, loPrice, nowPrice, volume, name): 
         self.__resDate = resDate
@@ -16,17 +17,12 @@ class XSL:
         self.__volume = volume
         self.__name = name
     def Xsl(self):
-    # raw_data = {'날짜' : DateRes, '기준선' : BaseLine_result, '전환선' : ToggleLine_result, '종가' : CPrice[1:]}
-        # raw_data = pd.DataFrame(raw_data)
-        # raw_data.to_excel(excel_writer=f'C:/Stock/{name}.xlsx')
-        #workbook = xlsxwriter.Workbook(f'{name}.xlsx')
         self.__name = str(self.__name)
 
         workbook = xlsxwriter.Workbook(f"{self.__name}.xlsx")
         worksheet = workbook.add_worksheet()
         GraphCount = len(self.__resDate)+1
 
-        # Add the worksheet data to be plotted.
         worksheet.write(0, 0, '날짜')
         worksheet.write(0, 1, '시가')
         worksheet.write(0, 2, '고가')

@@ -1,7 +1,7 @@
 from os import name
 import telegram
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler  
-
+from threading import Thread
 from datetime import datetime
 from Scraper import *
 from XSL import *
@@ -9,12 +9,16 @@ from AI import *
 from KeyValue import*
 
 
-access = "Telegram API"
-secret = "Telegram API"
-myToken = "Telegram Token"
+access = "ACCESS KEY"
+secret = "SECRET KEY"
+myToken = "TOKEN"
 
-bot_token = 'Telegram Bot Token'
+bot_token = 'BOT TOKEN'
 bot = telegram.Bot(token=bot_token)
+
+chat_id = 'ROOM ID'
+
+LOCATION = 'LOCATION'
 
 Ai_Fitting_Count = '720'
 
@@ -28,12 +32,12 @@ name = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 
 #명령어 정의
 def help_command(update, context) :
-    bot.sendMessage(chat_id=CHATID, text='help msg')
-    #bot.sendMessage(chat_id=CHATID, text='Claculate Success! \nsend command : /xsl')
+    bot.sendMessage(chat_id=chat_id, text='help msg')
+    #bot.sendMessage(chat_id=chat_id, text='Claculate Success! \nsend command : /xsl')
      
 def make_file(update, context):
     
-    bot.sendMessage(chat_id=CHATID, text='now calculating... \ndo not send message')
+    bot.sendMessage(chat_id=chat_id, text='now calculating... \ndo not send message')
     global Ai_Fitting_Count, getcode, timeframe, name
     code = stock(getcode) 
     result, resDate, markPrice, hiPrice, loPrice, nowPrice, volume = Scraper(count, code, timeframe).Scraping()
@@ -45,12 +49,12 @@ def make_file(update, context):
             resDate.append(redate[i].strftime('%Y%m%d'))
             nowPrice.append(round(Predict[i]))
             XSL(resDate, markPrice, hiPrice, loPrice, nowPrice, volume, name).Xsl()
-        bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
-        bot.sendMessage(chat_id=CHATID, text='Calculate Success!')
+        bot.sendDocument(chat_id=chat_id, document=open(LOCATION+f'\\{name}.xlsx', 'rb'))
+        bot.sendMessage(chat_id=chat_id, text='Calculate Success!')
     except:
         XSL(resDate, markPrice, hiPrice, loPrice, nowPrice, volume, name).Xsl()
-        bot.sendMessage(chat_id=CHATID, text='연산 완료!\n상장 2년 미만의 종목은 인공지능 서비스를 지원하지 않습니다.')   
-        bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
+        bot.sendMessage(chat_id=chat_id, text='연산 완료!\n상장 2년 미만의 종목은 인공지능 서비스를 지원하지 않습니다.')   
+        bot.sendDocument(chat_id=chat_id, document=open(LOCATION+f'\\{name}.xlsx', 'rb'))
         
             
 # message reply function
@@ -81,8 +85,12 @@ def get_message(update, context) :
 
 def send_local_file(update, context):
     global name
-    bot.sendDocument(chat_id=CHATID, document=open(f'./{name}.xlsx', 'rb'))
-    
+    bot.sendDocument(chat_id=chat_id, document=open(LOCATION+f'\\{name}.xlsx', 'rb'))
+
+# th1 = Thread(target=make_file)
+# def Thread():
+#     th1.start()
+#     th1.join()
     
 #새 메시지 확인
 updater = Updater(bot_token, use_context=True)
@@ -91,6 +99,8 @@ updater = Updater(bot_token, use_context=True)
 # 메세지중에서 command 제외
 message_handler = MessageHandler(Filters.text & (~Filters.command), get_message) 
 updater.dispatcher.add_handler(message_handler)
+
+#Multi Thread
 
 
 # 응답 커맨드 정의
@@ -102,7 +112,6 @@ updater.dispatcher.add_handler(file_Handler)
 
 Clac_Handler = CommandHandler('data', make_file)
 updater.dispatcher.add_handler(Clac_Handler)
-
 
 updater.start_polling(timeout=1, clean=True)
 updater.idle()
