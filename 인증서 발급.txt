@@ -1,0 +1,28 @@
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -subj "/CN=KKAYO-CA" -out server.csr
+openssl x509 -req -in server.csr -signkey server.key -out server.crt
+
+openssl genrsa -out client.key 2048
+openssl req -new -key client.key -subj "/CN=KKAYO-CLIENT" -out client.csr
+openssl x509 -req -in client.csr -CA server.crt -CAkey server.key -CAcreateserial -out client.crt
+
+
+
+
+sudo apt install pkg-config
+sudo apt install pkgconf
+pkg-config openssl-libs
+sudo apt-get install libssl-dev
+
+
+######################################
+sudo yum install openssl-devel
+######################################
+
+######################################
+pm2 monit
+######################################
+
+
+Code
+http://pchero21.com/?p=603

@@ -1,0 +1,15 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "pthread.h": "c",
+        "array": "cpp",
+        "string_view": "cpp",
+        "shared_mutex": "cpp",
+        "deque": "cpp",
+        "vector": "cpp",
+        "mutex": "cpp",
+        "string": "cpp",
+        "types.h": "c",
+        "stdlib.h": "c"
+    }
+}
